@@ -10,14 +10,14 @@ import javax.swing.JOptionPane;
  *
  * @author LEGION
  */
-public class frm_Caesar extends javax.swing.JFrame {
+public class frm_Transposition extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(frm_Caesar.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(frm_Transposition.class.getName());
 
     /**
      * Creates new form frm_Caesar
      */
-    public frm_Caesar() {
+    public frm_Transposition() {
         initComponents();
         setLocationRelativeTo(null);
     }
@@ -49,10 +49,10 @@ public class frm_Caesar extends javax.swing.JFrame {
         lbl_status = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Caesar Cipher");
+        setTitle("Transposition Cipher");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setText("MẬT MÃ CAESAR");
+        jLabel1.setText("MẬT MÃ HOÁN VỊ CỘT (TRANSPOSITION)");
 
         jLabel2.setText("Plaintext:");
 
@@ -65,10 +65,10 @@ public class frm_Caesar extends javax.swing.JFrame {
 
         txt_key.setColumns(20);
         txt_key.setRows(5);
-        txt_key.setText("3");
+        txt_key.setText("2,3,1");
         jScrollPane2.setViewportView(txt_key);
 
-        jLabel4.setText("Số nguyên, ví dụ: 3");
+        jLabel4.setText("Thứ tự đọc cột, cách nhau dấu phẩy, ví dụ 2,3,1");
 
         jLabel5.setText("Ciphertext: ");
 
@@ -165,18 +165,15 @@ public class frm_Caesar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_encryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_encryptActionPerformed
-        String plaintext = txt_plaintext.getText();
+   String plaintext = txt_plaintext.getText();
 if (plaintext.isEmpty()) {
     JOptionPane.showMessageDialog(this, "Hãy nhập Plaintext trước khi mã hóa.");
     return;
 }
 try {
-    int key = Integer.parseInt(txt_key.getText().trim());
-    txt_ciphertext.setText(CaesarCipher.encrypt(plaintext, key));
-    lbl_status.setText("Đã mã hóa với khóa k = " + key + ".");
-} catch (NumberFormatException ex) {
-    JOptionPane.showMessageDialog(this, "Khóa Caesar phải là số nguyên, ví dụ 3.",
-            "Khóa không hợp lệ", JOptionPane.ERROR_MESSAGE);
+    int[] key = TranspositionCipher.parseKey(txt_key.getText());
+    txt_ciphertext.setText(TranspositionCipher.encrypt(plaintext, key));
+    lbl_status.setText("Đã mã hóa với " + key.length + " cột.");
 } catch (IllegalArgumentException ex) {
     JOptionPane.showMessageDialog(this, ex.getMessage(),
             "Dữ liệu không hợp lệ", JOptionPane.ERROR_MESSAGE);
@@ -184,18 +181,15 @@ try {
     }//GEN-LAST:event_btn_encryptActionPerformed
 
     private void btn_decryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_decryptActionPerformed
-        String ciphertext = txt_ciphertext.getText();
+ String ciphertext = txt_ciphertext.getText();
 if (ciphertext.isEmpty()) {
     JOptionPane.showMessageDialog(this, "Hãy nhập Ciphertext trước khi giải mã.");
     return;
 }
 try {
-    int key = Integer.parseInt(txt_key.getText().trim());
-    txt_plaintext.setText(CaesarCipher.decrypt(ciphertext, key));
-    lbl_status.setText("Đã giải mã với khóa k = " + key + ".");
-} catch (NumberFormatException ex) {
-    JOptionPane.showMessageDialog(this, "Khóa Caesar phải là số nguyên, ví dụ 3.",
-            "Khóa không hợp lệ", JOptionPane.ERROR_MESSAGE);
+    int[] key = TranspositionCipher.parseKey(txt_key.getText());
+    txt_plaintext.setText(TranspositionCipher.decrypt(ciphertext, key));
+    lbl_status.setText("Đã giải mã với " + key.length + " cột.");
 } catch (IllegalArgumentException ex) {
     JOptionPane.showMessageDialog(this, ex.getMessage(),
             "Dữ liệu không hợp lệ", JOptionPane.ERROR_MESSAGE);
@@ -203,7 +197,7 @@ try {
     }//GEN-LAST:event_btn_decryptActionPerformed
 
     private void btn_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_saveActionPerformed
-        String path = FileTextIO.saveText(this, txt_ciphertext, "caesar_ciphertext.txt");
+   String path = FileTextIO.saveText(this, txt_ciphertext, "transposition_ciphertext.txt");
 if (path != null) {
     lbl_status.setText("Đã lưu tệp: " + path);
 }
@@ -238,7 +232,7 @@ if (path != null) {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new frm_Caesar().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new frm_Transposition().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
